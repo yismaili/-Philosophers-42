@@ -57,28 +57,28 @@ void* routine(void* arg) {
     int index = *(int*)arg;
     int i = 0;
     int sum = 0;
-    while(i < 5)
-    {
-        sum += primes[index + i];
-        i++;
-    }
-    //printf("%d ", primes[index]);
+    // while(i < 5)
+    // {
+    //     sum += primes[index + i];
+    //     i++;
+    // }
+    printf("%d ", primes[index]);
     free(arg);
 }
 
 int main(int argc, char* argv[]) {
     pthread_t th[10];
     int i = 0;
-    while (i < 2) {
+    while (i < 10) {
         int* a = malloc(sizeof(int));
-        *a = i * 5;
+        *a = i;
         if (pthread_create(&th[i], NULL, &routine, a) != 0) {
             perror("Failed to created thread");
         }
         i++;
     } 
     i = 0;
-    while (i < 2) {
+    while (i < 10) {
         if (pthread_join(th[i], NULL) != 0) {
             perror("Failed to join thread");
         }
