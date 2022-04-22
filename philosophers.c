@@ -49,41 +49,43 @@
 // }
 
 
-
 int primes[10] = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 };
 
 void* routine(void* arg) {
-    sleep(1);
     int index = *(int*)arg;
-    int i = 0;
     int sum = 0;
-    // while(i < 5)
-    // {
-    //     sum += primes[index + i];
-    //     i++;
-    // }
-    printf("%d ", primes[index]);
-    free(arg);
+    int j = 0;
+    while (j < 5) {
+        sum += primes[index + j];
+        j++;
+    }
+    printf("Local sum: %d\n", sum);
+    *(int*)arg = sum;
+    return arg;
 }
 
 int main(int argc, char* argv[]) {
-    pthread_t th[10];
+    pthread_t th[2];
     int i = 0;
-    while (i < 10) {
+    while (i < 2){
         int* a = malloc(sizeof(int));
-        *a = i;
+        *a = i * 5;
         if (pthread_create(&th[i], NULL, &routine, a) != 0) {
-            perror("Failed to created thread");
-        }
-        i++;
-    } 
-    i = 0;
-    while (i < 10) {
-        if (pthread_join(th[i], NULL) != 0) {
-            perror("Failed to join thread");
+            perror("Failed to create thread");
         }
         i++;
     }
-    
+    int globalSum = 0;
+    i = 0;
+    while (i < 2) {
+        int* r;
+        if (pthread_join(th[i], (void**) &r) != 0) {
+            perror("Failed to join thread");
+        }
+        globalSum += *r;
+        free(r);
+        i++;
+    }
+    printf("Global sum: %d\n", globalSum);
     return 0;
 }
