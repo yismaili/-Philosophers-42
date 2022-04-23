@@ -145,7 +145,7 @@ void* fuel_filling(void* arg) {
         fuel += 15;
         printf("Filled fuel... %d\n", fuel);
         pthread_mutex_unlock(&mutexFuel);
-        pthread_cond_signal(&condFuel);
+        pthread_cond_broadcast (&condFuel);
         sleep(1);
     }
 }
