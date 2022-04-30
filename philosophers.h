@@ -25,13 +25,17 @@ typedef struct s_philo
     int philo_position;
     int lift_fork;
     int right_fork;
-    pthread_t   mutex_philo;
+    pthread_mutex_t  mutex_philo;
+    pthread_t        *th_philo;
     
 }   t_philo;
 typedef struct s_data
 {
+    int         number_of_philo;
     t_philo     *philo;
+    pthread_mutex_t *mfork;
 }   t_data;
 
-int	ft_atoi(const char *str);
-int   init_args(t_data *data, int ac, char **av);
+int     ft_atoi(const char *str);
+t_data  *init_args( int ac, char **av);
+void    create_pthread(t_data *data);

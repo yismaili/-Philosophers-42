@@ -14,9 +14,10 @@
 
 int main(int ac, char **av)
 {
-	t_data	data;
+	t_data	*data;
 	if ( ac < 5)
-		exit(1);
-	init_args(&data, ac, av);
+		return(1);
+	data = init_args( ac, av);
+	create_pthread(data);
 	return 0;
 }

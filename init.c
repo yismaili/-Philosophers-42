@@ -11,42 +11,77 @@
 /* ************************************************************************** */
 
 #include "philosophers.h"
+#include <stdlib.h>
 
 void	init_philo(t_data *data)
 {
 	int	i;
-	t_philo *ptr;
-
-	while (i < ptr->number_of_philo)
+	i = 0;
+	while (i < data->number_of_philo)
 	{
-		data->philo[i].time_to_eat = 0;
 		data->philo[i].philo_position = i;
 		data->philo[i].lift_fork = i;
-		data->philo[i].right_fork = (i + 1) % (ptr->number_of_philo);
-		data->philo[i].number_must_eat = 0;
-		pthread_mutex_init(data->philo[i].mutex_philo, NULL);
+		data->philo[i].right_fork = i + 1;
+		if (data->philo[i].right_fork == data->number_of_philo)
+			data->philo[i].right_fork = 0;
+		pthread_mutex_init(&data->philo[i].mutex_philo, NULL);
 		i++;
-	}	
+	}
 }
-
-int   init_args(t_data *data, int ac, char **av)
+void	*routine(void *ptr)
 {
-    t_philo *ptr;
-    if (ac > 4)
-        exit(1);
-    ptr->number_of_philo = ft_atoi(av[1]);
-    ptr->time_to_die = ft_atoi(av[2]);
-    ptr->time_to_eat = ft_atoi(av[3]);
-    ptr->time_to_sleep = ft_atoi(av[4]);
+	printf("hey");
+	return (NULL);
+}
+void create_pthread(t_data *data)
+{
+	int i;
+	t_philo *ptr;
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		printf("data \n");
+		pthread_create(&ptr->th_philo[i], NULL, routine, (void *) &i);
+		i++;
+	}
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		pthread_join(ptr->th_philo[i], NULL);
+		i++;
+	}
+}
+t_data   *init_args(int ac, char **av)
+{
+	t_data	*data;
+	int		x;
+	int		y;
 
-    if (ac == 5)
-        ptr->number_must_eat = ft_atoi(av[5]);
-    else
-        ptr->number_must_eat = 0; // ou bien -1
-	data->philo = (t_philo*)malloc(sizeof(t_philo) * ptr->number_of_philo);
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (0);
+	y =  ft_atoi(av[1]);
+	data->number_of_philo = y; 
+	data->philo = malloc(sizeof(t_philo) * y);
 	if (!data->philo)
 		return (0);
-	init_philo(data);
+	x = 0;
+	
+	while (x < y)
+	{
 
-	return (0);
+		data->philo[x].number_of_philo = ft_atoi(av[1]);
+		data->philo[x].time_to_die = ft_atoi(av[2]);
+		data->philo[x].time_to_eat = ft_atoi(av[3]);
+		data->philo[x].time_to_sleep = ft_atoi(av[4]);
+		if (ac == 5)
+			data->philo[x].number_must_eat = ft_atoi(av[5]);
+		else
+			data->philo[x].number_must_eat = 0; // ou bien -1
+		x++;
+	}
+	init_philo(data);
+	
+
+	return (data);
 }
