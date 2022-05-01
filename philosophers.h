@@ -17,7 +17,6 @@
 
 typedef struct s_philo
 {
-    int number_of_philo;
     int time_to_die;
     int time_to_eat;
     int time_to_sleep;
@@ -33,7 +32,6 @@ typedef struct s_data
 {
     int         number_of_philo;
     t_philo     *philo;
-    pthread_mutex_t *mfork;
 }   t_data;
 
 int     ft_atoi(const char *str);

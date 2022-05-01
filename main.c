@@ -17,7 +17,7 @@ int main(int ac, char **av)
 	t_data	*data;
 	if ( ac < 5)
 		return(1);
-	data = init_args( ac, av);
+	data = init_args(ac, av);
 	create_pthread(data);
 	return 0;
 }

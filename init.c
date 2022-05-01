@@ -30,7 +30,7 @@ void	init_philo(t_data *data)
 }
 void	*routine(void *ptr)
 {
-	printf("hey");
+	printf("hey\n");
 	return (NULL);
 }
 void create_pthread(t_data *data)
@@ -40,7 +40,6 @@ void create_pthread(t_data *data)
 	i = 0;
 	while (i < data->number_of_philo)
 	{
-		printf("data \n");
 		pthread_create(&ptr->th_philo[i], NULL, routine, (void *) &i);
 		i++;
 	}
@@ -54,31 +53,26 @@ void create_pthread(t_data *data)
 t_data   *init_args(int ac, char **av)
 {
 	t_data	*data;
-	int		x;
-	int		y;
+	int		i;
 
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (0);
-	y =  ft_atoi(av[1]);
-	data->number_of_philo = y; 
-	data->philo = malloc(sizeof(t_philo) * y);
+	data->number_of_philo =  ft_atoi(av[1]); 
+	data->philo = malloc(sizeof(t_philo) * 	data->number_of_philo);
 	if (!data->philo)
 		return (0);
-	x = 0;
-	
-	while (x < y)
+	i = 0;
+	while (i < data->number_of_philo)
 	{
-
-		data->philo[x].number_of_philo = ft_atoi(av[1]);
-		data->philo[x].time_to_die = ft_atoi(av[2]);
-		data->philo[x].time_to_eat = ft_atoi(av[3]);
-		data->philo[x].time_to_sleep = ft_atoi(av[4]);
+		data->philo[i].time_to_die = ft_atoi(av[2]);
+		data->philo[i].time_to_eat = ft_atoi(av[3]);
+		data->philo[i].time_to_sleep = ft_atoi(av[4]);
 		if (ac == 5)
-			data->philo[x].number_must_eat = ft_atoi(av[5]);
+			data->philo[i].number_must_eat = ft_atoi(av[5]);
 		else
-			data->philo[x].number_must_eat = 0; // ou bien -1
-		x++;
+			data->philo[i].number_must_eat = 0; // ou bien -1
+		i++;
 	}
 	init_philo(data);
 	
