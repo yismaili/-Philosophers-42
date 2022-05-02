@@ -17,21 +17,18 @@
 
 typedef struct s_philo
 {
+    int philo_position;
+    pthread_mutex_t lift_fork;
+    pthread_mutex_t right_fork;
+    pthread_mutex_t  mutex_philo;
+}   t_philo;
+typedef struct s_data
+{
+    int number_of_philo;
     int time_to_die;
     int time_to_eat;
     int time_to_sleep;
     int number_must_eat;
-    int philo_position;
-    int lift_fork;
-    int right_fork;
-    pthread_mutex_t  mutex_philo;
-    pthread_t        *th_philo;
-    
-}   t_philo;
-typedef struct s_data
-{
-    int         number_of_philo;
-    t_philo     *philo;
 }   t_data;
 
 int     ft_atoi(const char *str);
