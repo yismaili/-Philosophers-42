@@ -14,13 +14,16 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <sys/time.h>
 
 typedef struct s_philo
 {
-    int philo_position;
+    int             philo_position;
     pthread_mutex_t lift_fork;
     pthread_mutex_t right_fork;
     pthread_mutex_t  mutex_philo;
+    pthread_mutex_t    fork;
+
 }   t_philo;
 typedef struct s_data
 {
@@ -29,8 +32,13 @@ typedef struct s_data
     int time_to_eat;
     int time_to_sleep;
     int number_must_eat;
+    pthread_mutex_t mut_write;
 }   t_data;
 
 int     ft_atoi(const char *str);
 t_data  *init_args( int ac, char **av);
 void    create_pthread(t_data *data);
+void	init_philo(t_philo *philo, t_data *data);
+void	take_forks(t_philo *philo);
+void	get_message(int type);
+long int git_time();

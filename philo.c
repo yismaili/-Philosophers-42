@@ -1,41 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yismaili <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/23 18:53:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/04/23 18:54:07 by yismaili         ###   ########.fr       */
+/*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
+/*   Updated: 2022/04/23 11:34:59 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-#include <stdlib.h>
 
-void	init_philo(t_data *data)
+void	init_philo(t_philo *philo, t_data *data)
 {
 	int	i;
 	i = 0;
 	while (i < data->number_of_philo)
 	 {
-	// 	data->philo[i].philo_position = i;
-	// 	data->philo[i].lift_fork = i;
-	// 	data->philo[i].right_fork = i + 1;
-	// 	if (data->philo[i].right_fork == data->number_of_philo)
-	// 		data->philo[i].right_fork = 0;
-	// 	pthread_mutex_init(&data->philo[i].mutex_philo, NULL);
+		philo[i].philo_position = i;
+		philo[i].lift_fork = philo[i].fork;
+		philo[i].right_fork = philo[i + 1].fork;
+		if (i == data->number_of_philo)
+	 		philo[i].right_fork = philo[0].fork;
 		i++;
 	}
 }
 void	*routine(void *ptr)
 {	
 	int i = 0;
-    while (i < 4)
-    {
-		printf("%d\n", i);
-         i++;
-    }
+	t_philo		*philo;
+
+	philo = (t_philo *)ptr;
+	take_forks(philo);
+
+	
 	return (NULL);
 }
 void create_pthread(t_data *data)
@@ -82,8 +81,8 @@ t_data   *init_args(int ac, char **av)
 			data->number_must_eat = 0; // ou bien -1
 		i++;
 	}
-	init_philo(data);
-	
+	init_philo(philo, data);
 
 	return (data);
 }
+
