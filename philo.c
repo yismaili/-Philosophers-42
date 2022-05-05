@@ -18,58 +18,35 @@ void	init_philo(t_philo *philo, t_data *data)
 	i = 0;
 	while (i < data->number_of_philo)
 	 {
-		philo[i].philo_position = i;
-		philo[i].lift_fork = philo[i].fork;
+		philo[i].philo_id = i;
 		philo[i].right_fork = philo[i + 1].fork;
 		if (i == data->number_of_philo)
 	 		philo[i].right_fork = philo[0].fork;
 		i++;
 	}
 }
+
 void	*routine(void *ptr)
 {	
 	int			i;
 	t_philo		*philo;
-
+	t_data	data;
 	philo = (t_philo *)ptr;
 	philo->eat_count = 0;
 	i = 0;
-	philo->last_time = philo->data->get_t + philo->data->time_to_die;
-	while (i < philo->data->number_must_eat || !(philo -> data -> number_must_eat))
+	philo->last_time = data.get_t + data.time_to_die;
+	while (i < 10)
 	{
 		philo_activities(philo);
+		if (i == data.number_must_eat)
+			get_message("is thinking", philo->philo_id, &data);
 		i++;
-		if (i == philo->data->number_must_eat)
-			get_message("is thinking", philo->philo_position, philo->data);
 	}
 	philo->eat_count = 1;
 	return (NULL);
 }
 
-void create_pthread(t_data *data)
-{
-	int i;
-	t_philo *ptr;
-	pthread_t	th_philo;
-	i = 0;
-	pthread_mutex_init(&data->mutex_philo, NULL);
-	while (i < data->number_of_philo)
-	{
-		if (pthread_create(&th_philo, NULL, routine, (void *) &i) != 0)
-			printf("Failed to create thread\n");
-		i++;
-	}
-	i = 0;
-	while (i < data->number_of_philo)
-	{
-		if (pthread_join(th_philo, NULL) != 0)
-			printf("Failed to join thread\n");
-		i++;
-	}
-	pthread_mutex_destroy(&data->mutex_philo);
-}
-
-t_data   *init_args(int ac, char **av)
+t_philo   *init_args(int ac, char **av)
 {
 	t_data	*data;
 	t_philo	*philo;
@@ -78,12 +55,15 @@ t_data   *init_args(int ac, char **av)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (0);
+	data->get_t = get_time();
 	data->number_of_philo =  ft_atoi(av[1]); 
-	philo = malloc(sizeof(t_philo) * 	data->number_of_philo);
+	philo = malloc(sizeof(t_philo) * data->number_of_philo);
 	if (!philo)
 		return (0);
 	i = 0;
-	data->get_t = get_time();
+	while (i < data ->number_of_philo)
+		pthread_mutex_init(&philo[i++].fork, NULL);
+	i = 0;
 	while (i < data->number_of_philo)
 	{
 		data->time_to_die = ft_atoi(av[2]);
@@ -96,7 +76,23 @@ t_data   *init_args(int ac, char **av)
 		i++;
 	}
 	init_philo(philo, data);
-
-	return (data);
+		i = 0;
+	while (i < data -> number_of_philo)
+	{
+		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
+			ft_die("Failed to create thread",philo);
+		usleep(10);
+		i++;
+	}
+	i = 0;
+	while (i < data->number_of_philo)
+		pthread_detach(philo[i++].th_philo);
+	return (philo);
 }
 
+ void	ft_die(char *str , t_philo *philo)
+ {
+	 free(philo);
+	 	printf("%s\n", str);	
+	 return ;
+ }
