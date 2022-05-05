@@ -37,7 +37,7 @@ int	ft_atoi(const char *str)
 	return (res * sgn);
 }
 
-long int git_time()
+long int get_time()
 {
     struct timeval current_time;
     gettimeofday(&current_time, NULL);

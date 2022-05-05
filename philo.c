@@ -28,32 +28,45 @@ void	init_philo(t_philo *philo, t_data *data)
 }
 void	*routine(void *ptr)
 {	
-	int i = 0;
+	int			i;
 	t_philo		*philo;
 
 	philo = (t_philo *)ptr;
-	take_forks(philo);
-
-	
+	philo->eat_count = 0;
+	i = 0;
+	philo->last_time = philo->data->get_t + philo->data->time_to_die;
+	while (i < philo->data->number_must_eat || !(philo -> data -> number_must_eat))
+	{
+		philo_activities(philo);
+		i++;
+		if (i == philo->data->number_must_eat)
+			get_message("is thinking", philo->philo_position, philo->data);
+	}
+	philo->eat_count = 1;
 	return (NULL);
 }
+
 void create_pthread(t_data *data)
 {
 	int i;
 	t_philo *ptr;
 	pthread_t	th_philo;
 	i = 0;
+	pthread_mutex_init(&data->mutex_philo, NULL);
 	while (i < data->number_of_philo)
 	{
-		pthread_create(&th_philo, NULL, routine, (void *) &i);
+		if (pthread_create(&th_philo, NULL, routine, (void *) &i) != 0)
+			printf("Failed to create thread\n");
 		i++;
 	}
 	i = 0;
 	while (i < data->number_of_philo)
 	{
-		pthread_join(th_philo, NULL);
+		if (pthread_join(th_philo, NULL) != 0)
+			printf("Failed to join thread\n");
 		i++;
 	}
+	pthread_mutex_destroy(&data->mutex_philo);
 }
 
 t_data   *init_args(int ac, char **av)
@@ -70,6 +83,7 @@ t_data   *init_args(int ac, char **av)
 	if (!philo)
 		return (0);
 	i = 0;
+	data->get_t = get_time();
 	while (i < data->number_of_philo)
 	{
 		data->time_to_die = ft_atoi(av[2]);
