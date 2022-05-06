@@ -35,7 +35,7 @@ void	*routine(void *ptr)
 	philo->eat_count = 0;
 	i = 0;
 	philo->last_time = data.get_t + data.time_to_die;
-	while (i < 10)
+	while (i < philo->data->number_of_philo)
 	{
 		philo_activities(philo);
 		if (i == data.number_must_eat)
@@ -46,13 +46,11 @@ void	*routine(void *ptr)
 	return (NULL);
 }
 
-t_philo   *init_args(int ac, char **av)
+t_philo   *init_args(int ac, char **av, t_data	*data)
 {
-	t_data	*data;
 	t_philo	*philo;
 	int		i;
 
-	data = malloc(sizeof(t_data));
 	if (!data)
 		return (0);
 	data->get_t = get_time();
@@ -64,18 +62,20 @@ t_philo   *init_args(int ac, char **av)
 	while (i < data ->number_of_philo)
 		pthread_mutex_init(&philo[i++].fork, NULL);
 	i = 0;
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	if (ac == 5)
+		data->number_must_eat = ft_atoi(av[5]);
+	else
+		data->number_must_eat = 0; // ou bien -1
 	while (i < data->number_of_philo)
 	{
-		data->time_to_die = ft_atoi(av[2]);
-		data->time_to_eat = ft_atoi(av[3]);
-		data->time_to_sleep = ft_atoi(av[4]);
-		if (ac == 5)
-			data->number_must_eat = ft_atoi(av[5]);
-		else
-			data->number_must_eat = 0; // ou bien -1
+		philo[i].data = data;
 		i++;
 	}
 	init_philo(philo, data);
+	printf("hey fata\n");
 		i = 0;
 	while (i < data -> number_of_philo)
 	{

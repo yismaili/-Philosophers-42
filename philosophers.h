@@ -39,7 +39,7 @@ typedef struct s_philo
     int             last_time;
 }   t_philo;
 int     ft_atoi(const char *str);
-t_philo   *init_args(int ac, char **av);
+t_philo   *init_args(int ac, char **av, t_data *data);
 void	init_philo(t_philo *philo, t_data *data);
 void	take_forks(t_philo *philo);
 void	get_message(char *s, int id, t_data *data);

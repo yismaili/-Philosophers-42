@@ -38,8 +38,10 @@ void	get_message(char *s, int id, t_data *data)
 int main(int ac, char **av)
 {
 	t_philo	*data;
+	t_data	data_;
+	
 	if ( ac < 5)
 		return(1);
-	data = init_args(ac, av);
+	data = init_args(ac, av, &data_);
 	return 0;
 }
