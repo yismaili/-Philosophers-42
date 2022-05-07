@@ -25,6 +25,8 @@ typedef struct s_data
     int number_must_eat;
     unsigned int get_t;
     pthread_mutex_t mut_write;
+    int             stut;
+    int             nb;
   
 }   t_data;
 
@@ -47,3 +49,4 @@ long int get_time();
 void	clean_forks(t_philo *philo);
 void	philo_activities(t_philo *philo);
  void	ft_die(char *str , t_philo *philo);
+ void *ft_check(void *ptr);
