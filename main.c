@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yismaili <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 20:13:34 by yismaili          #+#    #+#             */
-/*   Updated: 2022/04/26 20:16:28 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/08 18:12:46 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void	philo_activities(t_philo *philo)
 {
 	get_message("is thinking", philo->philo_id, philo->data);
-	pthread_mutex_lock(&philo -> fork);
+	pthread_mutex_lock(&philo->fork);
 	get_message("has taken a fork", philo->philo_id, philo->data);
-	pthread_mutex_lock(&philo->right_fork);
+	pthread_mutex_lock(philo->right_fork);
 	get_message("has taken a fork", philo->philo_id, philo->data);
 	philo->last_time = get_time() + philo->data->time_to_die;
 	get_message("is eating", philo->philo_id, philo->data);
-	usleep(philo->data->time_to_eat * 1000);
-	pthread_mutex_unlock(&philo -> fork);
-	pthread_mutex_unlock(&philo -> right_fork);
-	get_message("is sleeping", philo->philo_id, philo->data);
+	usleep(1000 * philo->data->time_to_eat);
+	get_message("is sleeping***********", philo->philo_id, philo->data);
+	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(philo->right_fork);
 	usleep(philo->data->time_to_sleep * 1000);
 }
 void	get_message(char *s, int philo_id, t_data *data)
@@ -49,12 +49,6 @@ int main(int ac, char **av)
 	philo = init_args(ac, av, &data);
 	if (philo == NULL)
 		return (0);
-	while (data.stut == 0)
-	{
-		if (data.nb == data.number_of_philo)
-			break ;
-		usleep(50);
-	}
 	int i = 0;
 	while (i < data.number_of_philo)
 		pthread_mutex_destroy(&philo[i++].fork);

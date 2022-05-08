@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yismaili <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/04/23 11:34:59 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/08 18:10:53 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	init_philo(t_philo *philo, t_data *data)
-{
-	int	i;
-	i = 0;
-	while (i < data->number_of_philo)
-	 {
-		philo[i].philo_id = i;
-		philo[i].data = data;
-		philo[i].right_fork = philo[i + 1].fork;
-		if (i == data->number_of_philo)
-	 		philo[i].right_fork = philo[0].fork;
-		i++;
-	}
-}
 
 void	*routine(void *ptr)
 {	
@@ -36,8 +21,8 @@ void	*routine(void *ptr)
 	philo->eat_count = 0;
 	i = 0;
 	philo->last_time = philo->data->get_t + philo->data->time_to_die;
-	pthread_create(&thread, NULL, &ft_check, philo);
-	pthread_detach(thread);
+	// pthread_create(&thread, NULL, &ft_check, philo);
+	// pthread_detach(thread);
 	while (i < philo->data->number_of_philo)
 	{
 		philo_activities(philo);
@@ -56,7 +41,7 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		if (get_time() >= philo->last_time)
+		if (get_time() >= philo->last_time + 5)
 		{
 			get_message("died", philo->philo_id, philo->data);
 			pthread_mutex_lock(&philo->data->mut_write);
@@ -83,8 +68,11 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	if (!philo)
 		return (0);
 	i = 0;
-	while (i < data ->number_of_philo)
-		pthread_mutex_init(&philo[i++].fork, NULL);
+	while (i < data->number_of_philo)
+	{
+		pthread_mutex_init(&philo[i].fork, NULL);
+		i++;
+	}
 	i = 0;
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -93,14 +81,8 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 		data->number_must_eat = ft_atoi(av[5]);
 	else
 		data->number_must_eat = 0; // ou bien -1
-	// while (i < data->number_of_philo)
-	// {
-	// 	philo[i].data = data;
-	// 	i++;
-	// }
 	init_philo(philo, data);
-		i = 0;
-	while (i < data -> number_of_philo)
+	while (i < data->number_of_philo)
 	{
 		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
 			ft_die("Failed to create thread",philo);
@@ -108,11 +90,28 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 		i++;
 	}
 	i = 0;
+	while(1);
 	while (i < data->number_of_philo)
 		pthread_detach(philo[i++].th_philo);
 	return (philo);
 }
 
+void init_philo(t_philo *philo, t_data *data)
+{
+	int i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	 {
+		philo[i].philo_id = i + 1;
+		philo[i].data = data;
+		 if (i == (data->number_of_philo - 1))
+	 	 	philo[i].right_fork = &philo[0].fork;
+		 else
+		 	philo[i].right_fork = &philo[i + 1].fork;
+		i++;
+	}
+}
  void	ft_die(char *str , t_philo *philo)
  {
 	 free(philo);
