@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 20:13:34 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/08 18:12:46 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:31:10 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,24 @@
 
 void	philo_activities(t_philo *philo)
 {
-	get_message("is thinking", philo->philo_id, philo->data);
 	pthread_mutex_lock(&philo->fork);
-	get_message("has taken a fork", philo->philo_id, philo->data);
+	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
 	pthread_mutex_lock(philo->right_fork);
-	get_message("has taken a fork", philo->philo_id, philo->data);
-	philo->last_time = get_time() + philo->data->time_to_die;
-	get_message("is eating", philo->philo_id, philo->data);
+	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
+	philo->time_to_kill = get_time() + philo->data->time_to_die;
+	//printf(" kill %u\n",philo->data->time_to_die);
+	get_message("is eating", philo->philo_id, philo->data, KYEL);
 	usleep(1000 * philo->data->time_to_eat);
-	get_message("is sleeping***********", philo->philo_id, philo->data);
+	get_message("is sleeping", philo->philo_id, philo->data, KBLU);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->right_fork);
 	usleep(philo->data->time_to_sleep * 1000);
+	get_message("is thinking", philo->philo_id, philo->data, KCYN);
 }
-void	get_message(char *s, int philo_id, t_data *data)
+void	get_message(char *s, int philo_id, t_data *data, char *clor)
 {
-	unsigned int new_time = get_time();
-
 	pthread_mutex_lock(&data->mut_write);
-	printf("%u %d %s\n",new_time - data->get_t, philo_id, s);
+	printf("%s %u %d %s\n",clor, get_time() - data->get_t, philo_id, s);
 	pthread_mutex_unlock(&data->mut_write);
 }
 
@@ -47,12 +46,5 @@ int main(int ac, char **av)
 	philo->data->stut = 0;
 	pthread_mutex_init(&data.mut_write, NULL);
 	philo = init_args(ac, av, &data);
-	if (philo == NULL)
-		return (0);
-	int i = 0;
-	while (i < data.number_of_philo)
-		pthread_mutex_destroy(&philo[i++].fork);
-	pthread_mutex_destroy(&data.mut_write);
-	free(philo);
 	return 0;
 }

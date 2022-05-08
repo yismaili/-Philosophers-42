@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:08:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/07 22:24:11 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:18:39 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_atoi(const char *str)
 	return (res * sgn);
 }
 
-long int get_time()
+unsigned int get_time()
 {
     struct timeval current_time;
     gettimeofday(&current_time, NULL);

@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/08 18:10:53 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:33:45 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,17 @@ void	*routine(void *ptr)
 	t_philo		*philo;
 	pthread_t	thread;
 	philo = (t_philo *)ptr;
-	philo->eat_count = 0;
 	i = 0;
-	philo->last_time = philo->data->get_t + philo->data->time_to_die;
-	// pthread_create(&thread, NULL, &ft_check, philo);
-	// pthread_detach(thread);
+	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
+	pthread_create(&thread, NULL, &ft_check, philo);
+	pthread_detach(thread);
 	while (i < philo->data->number_of_philo)
 	{
 		philo_activities(philo);
 		if (i == philo->data->number_must_eat)
-			get_message("is thinking", philo->philo_id, philo->data);
+			get_message("is thinking", philo->philo_id, philo->data, KCYN);
 		i++;
 	}
-	philo->eat_count = 1;
 	return (NULL);
 }
 
@@ -41,13 +39,14 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		if (get_time() >= philo->last_time + 5)
+		// printf(" kill %u\n",philo->time_to_kill);
+		// printf("time %ld\n",get_time());
+		if (philo->time_to_kill <= get_time())
 		{
-			get_message("died", philo->philo_id, philo->data);
+			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
-			philo->data->stut = 1;
 		}
-		else if (philo->eat_count == 1)
+		else
 		{
 			philo->data->nb++;
 			break;
@@ -80,9 +79,9 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	if (ac == 5)
 		data->number_must_eat = ft_atoi(av[5]);
 	else
-		data->number_must_eat = 0; // ou bien -1
+		data->number_must_eat = 0;
 	init_philo(philo, data);
-	while (i < data->number_of_philo)
+	while (i < data->number_of_philo )
 	{
 		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
 			ft_die("Failed to create thread",philo);
