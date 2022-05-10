@@ -6,9 +6,12 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/08 22:18:48 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/10 21:11:50 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,8 +36,8 @@ typedef struct s_data
     int number_must_eat;
     unsigned int get_t;
     pthread_mutex_t mut_write;
-    int             stut;
-    int             nb;
+    int             st;
+    int             count_philo;
   
 }   t_data;
 
@@ -60,3 +63,5 @@ void	clean_forks(t_philo *philo);
 void	philo_activities(t_philo *philo);
  void	ft_die(char *str , t_philo *philo);
  void *ft_check(void *ptr);
+ 
+#endif

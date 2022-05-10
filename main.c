@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 20:13:34 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/08 22:31:10 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/10 21:09:21 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	philo_activities(t_philo *philo)
 	pthread_mutex_lock(philo->right_fork);
 	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
 	philo->time_to_kill = get_time() + philo->data->time_to_die;
-	//printf(" kill %u\n",philo->data->time_to_die);
 	get_message("is eating", philo->philo_id, philo->data, KYEL);
 	usleep(1000 * philo->data->time_to_eat);
 	get_message("is sleeping", philo->philo_id, philo->data, KBLU);
@@ -42,8 +41,6 @@ int main(int ac, char **av)
 
 	if ( ac < 5)
 		return(1);
-	philo->data->nb = 0;
-	philo->data->stut = 0;
 	pthread_mutex_init(&data.mut_write, NULL);
 	philo = init_args(ac, av, &data);
 	return 0;
