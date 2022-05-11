@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:08:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/08 22:18:39 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/11 21:13:49 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,20 @@ int	ft_atoi(const char *str)
 	i = 0;
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	if ((str[i] == '-' || str[i] == '+' ))
 	{
 		if (str[i] == '-')
 			sgn *= -1;
+		if (str[i + 1] == '\0')
+			ft_die("Error");
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i])
 	{
-		res = (res * 10) + (str[i] - '0');
-		i++;
+		if (str[i] >= '0' && str[i] <= '9')
+			res = (res * 10) + (str[i++] - '0');
+		else
+			ft_die("Error");
 	}
 	return (res * sgn);
 }

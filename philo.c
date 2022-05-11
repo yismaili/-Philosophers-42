@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/10 21:31:22 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/11 22:21:07 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	*routine(void *ptr)
 		philo_activities(philo);
 		if (i == philo->data->number_must_eat)
 			get_message("is thinking", philo->philo_id, philo->data, KCYN);
+		philo->count_eat++;
 		i++;
 	}
 	return (NULL);
@@ -39,9 +40,7 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		// printf(" kill %u\n",philo->time_to_kill);
-		// printf("time %ld\n",get_time());
-		if ((philo->time_to_kill + 5) <= get_time())
+		if (philo->time_to_kill <= get_time() && philo->count_eat <= philo->data->number_must_eat)
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
@@ -54,6 +53,7 @@ void *ft_check(void *ptr)
 	}
 	return (NULL);
 }
+
 t_philo   *init_args(int ac, char **av, t_data	*data)
 {
 	t_philo	*philo;
@@ -78,15 +78,16 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
-	if (ac == 5)
+	data->number_must_eat = 1;
+	if (ac == 6)
 		data->number_must_eat = ft_atoi(av[5]);
-	else
-		data->number_must_eat = 0;
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data ->time_to_die < 60 || data -> time_to_eat < 60 || data -> time_to_sleep < 60 || data->number_must_eat <= 0)
+		ft_die("ArgumentError\n");
 	init_philo(philo, data);
 	while (i < data->number_of_philo )
 	{
 		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
-			ft_die("Failed to create thread",philo);
+			ft_die("Failed to create thread");
 		usleep(100);
 		i++;
 	}
@@ -117,9 +118,8 @@ void init_philo(t_philo *philo, t_data *data)
 		i++;
 	}
 }
- void	ft_die(char *str , t_philo *philo)
+ int 	ft_die(char *str)
  {
-	 //free(philo);
-	 	printf("%s\n", str);	
-	 return ;
+	printf("%s\n", str);	
+	 exit(1);
  }
