@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/13 18:25:25 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/14 00:50:11 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ void	*routine(void *ptr)
 	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
 	pthread_create(&thread, NULL, &ft_check, philo);
 	pthread_detach(thread);
-	while (i < philo->data->number_of_philo || philo->time_to_kill > get_time())
+	while (1)
 	{
 		philo_activities(philo);
-		i++;
 	}
 	return (NULL);
 }
@@ -37,7 +36,7 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		if (philo->time_to_kill <= get_time() && philo->count_eat <= philo->data->number_must_eat)
+		if (philo->time_to_kill <= get_time())
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
@@ -50,17 +49,31 @@ void *ft_check(void *ptr)
 	}
 	return (NULL);
 }
-
+void *check_eat(void *ptr)
+{
+	t_philo *philo;
+	philo = (t_philo *)ptr;
+	while (1)
+	{
+		if (philo->data->eaten == philo->data->number_of_philo)
+			philo->data->st = 1;
+    	usleep(500);
+	}
+	return(NULL);
+	
+}
 t_philo   *init_args(int ac, char **av, t_data	*data)
 {
 	t_philo	*philo;
 	int		i;
-
+	pthread_t temp;
+	
 	if (!data)
 		return (0);
 	data->get_t = get_time();
 	data->count_philo = 0;
 	data->st = 0;
+	data->eaten = 0;
 	data->number_of_philo =  ft_atoi(av[1]); 
 	philo = malloc(sizeof(t_philo) * data->number_of_philo);
 	if (!philo)
@@ -75,31 +88,35 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
-	data->number_must_eat = 1;
 	if (ac == 6)
+	{
 		data->number_must_eat = ft_atoi(av[5]);
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat <= 0)
+	}
+	else
+		data->number_must_eat = -1;
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200)
 		ft_die("ArgumentError\n");
 	init_philo(philo, data);
+
 	while (i < data->number_of_philo )
 	{
 		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
 			ft_die("Failed to create thread");
+		pthread_detach(philo[i].th_philo);
 		usleep(100);
 		i++;
 	}
+	if (data->number_must_eat != -1)
+	{
+		if (pthread_create(&temp, NULL, check_eat, philo) != 0)
+			ft_die("Failed to create thread");
+		pthread_detach(temp);
+	}
 	i = 0;
-	while (i < data->number_of_philo)
-		pthread_detach(philo[i++].th_philo);
 	while(data->st == 0)
 	{
-		if (data->count_philo == data->number_of_philo)
-			break;
+		usleep(500);
 	}
-	// i = 0;
-	// while (i < data->number_of_philo)
-	// 	pthread_mutex_destroy(&philo[i++].fork);
-	// pthread_mutex_destroy(&data->mut_write);
 	return (philo);
 }
 

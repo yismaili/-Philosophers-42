@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/11 21:47:14 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/13 19:45:04 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -34,11 +35,13 @@ typedef struct s_data
     int time_to_eat;
     int time_to_sleep;
     int number_must_eat;
-    unsigned int get_t;
-    pthread_mutex_t mut_write;
     int             st;
+    int             eaten;
     int             count_philo;
   
+    unsigned int get_t;
+    pthread_mutex_t mut_write;
+
 }   t_data;
 
 typedef struct s_philo
