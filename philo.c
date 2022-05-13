@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/11 22:21:07 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/13 18:25:25 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ void	*routine(void *ptr)
 	while (i < philo->data->number_of_philo || philo->time_to_kill > get_time())
 	{
 		philo_activities(philo);
-		if (i == philo->data->number_must_eat)
-			get_message("is thinking", philo->philo_id, philo->data, KCYN);
-		philo->count_eat++;
 		i++;
 	}
 	return (NULL);
@@ -81,7 +78,7 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	data->number_must_eat = 1;
 	if (ac == 6)
 		data->number_must_eat = ft_atoi(av[5]);
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data ->time_to_die < 60 || data -> time_to_eat < 60 || data -> time_to_sleep < 60 || data->number_must_eat <= 0)
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat <= 0)
 		ft_die("ArgumentError\n");
 	init_philo(philo, data);
 	while (i < data->number_of_philo )
@@ -92,13 +89,17 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 		i++;
 	}
 	i = 0;
+	while (i < data->number_of_philo)
+		pthread_detach(philo[i++].th_philo);
 	while(data->st == 0)
 	{
 		if (data->count_philo == data->number_of_philo)
 			break;
 	}
-	while (i < data->number_of_philo)
-		pthread_detach(philo[i++].th_philo);
+	// i = 0;
+	// while (i < data->number_of_philo)
+	// 	pthread_mutex_destroy(&philo[i++].fork);
+	// pthread_mutex_destroy(&data->mut_write);
 	return (philo);
 }
 
