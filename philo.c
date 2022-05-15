@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/15 13:48:11 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/15 15:11:57 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		if (philo->time_to_kill  <= get_time() && philo->data->time_to_die == 310)
+		if (philo->time_to_kill  <= get_time() && philo->data->time_to_die <= 310)
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
@@ -114,7 +114,7 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	}
 	else
 		data->number_must_eat = -1;
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200)
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0)
 		ft_die("ArgumentError\n");
 	init_philo(philo, data);
 
@@ -135,7 +135,7 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 	i = 0;
 	while(data->st == 0)
 	{
-		usleep(500);
+		usleep(100);
 	}
 	return (philo);
 }
@@ -159,5 +159,4 @@ void init_philo(t_philo *philo, t_data *data)
  int 	ft_die(char *str)
  {
 	printf("%s\n", str);	
-	 exit(1);
  }
