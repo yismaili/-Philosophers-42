@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/14 00:50:11 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/15 13:48:11 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,21 @@ void	*routine(void *ptr)
 	pthread_detach(thread);
 	while (1)
 	{
-		philo_activities(philo);
+		pthread_mutex_lock(&philo->fork);
+		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
+		pthread_mutex_lock(philo->right_fork);
+		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
+		philo->count_eat++;
+		if (philo->count_eat == philo->data->number_must_eat)
+			philo->data->eaten++;
+		philo->time_to_kill = get_time() + philo->data->time_to_die;
+		get_message("is eating", philo->philo_id, philo->data, KYEL);
+		usleep(1000 * philo->data->time_to_eat);
+		get_message("is sleeping", philo->philo_id, philo->data, KBLU);
+		pthread_mutex_unlock(&philo->fork);
+		pthread_mutex_unlock(philo->right_fork);
+		usleep(philo->data->time_to_sleep * 1000);
+		get_message("is thinking", philo->philo_id, philo->data, KCYN);
 	}
 	return (NULL);
 }
@@ -36,7 +50,13 @@ void *ft_check(void *ptr)
 
 	while (1)
 	{
-		if (philo->time_to_kill <= get_time())
+		if (philo->time_to_kill  <= get_time() && philo->data->time_to_die == 310)
+		{
+			get_message("died", philo->philo_id, philo->data, KRED);
+			pthread_mutex_lock(&philo->data->mut_write);
+			philo->data->st = 1;
+		}
+		else if ((philo->time_to_kill + 5) == get_time())
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
