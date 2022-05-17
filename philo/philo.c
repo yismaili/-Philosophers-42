@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/15 15:11:57 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:53:48 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void *ft_check(void *ptr)
 			pthread_mutex_lock(&philo->data->mut_write);
 			philo->data->st = 1;
 		}
-		else if ((philo->time_to_kill + 5) == get_time())
+		else if ((philo->time_to_kill + 8) == get_time())
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			pthread_mutex_lock(&philo->data->mut_write);
@@ -159,4 +159,5 @@ void init_philo(t_philo *philo, t_data *data)
  int 	ft_die(char *str)
  {
 	printf("%s\n", str);	
+	return (0);
  }
