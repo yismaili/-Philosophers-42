@@ -6,20 +6,20 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/16 22:31:20 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/19 19:16:45 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_PONUS_H
 # define PHILO_PONUS_H
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <string.h>
+#include <stdio.h>
+#include <semaphore.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <unistd.h>
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -38,6 +38,8 @@ typedef struct s_data
     int number_must_eat;
     unsigned int get_t;
     int     eaten;
+    int     st;
+    int     count_philo;
     pid_t           *pid;
     sem_t			mut_write;
 }   t_data;
@@ -45,14 +47,19 @@ typedef struct s_data
 typedef struct s_philo
 {
     int             philo_id;
-    sem_t           *right_fork;
-    sem_t           *fork;
+    sem_t           right_fork;
+    sem_t           fork;
     pid_t           *pid;
     t_data          *data;
     int             count_eat;
     unsigned int    time_to_kill;
 }   t_philo;
-t_philo   *init_args(int ac, char **av, t_data	*data);
-void	get_message(char *s, int philo_id, t_data *data, char *clor);
-void	init_philo(t_data *data, t_philo	*philo);
+t_data    *init_data(int ac, char **av, t_data	*data);
+void	        get_message(char *s, int philo_id, t_data *data, char *clor);
+void	        init_philo(t_data *data);
+unsigned int    get_time();
+int             ft_die(char *str);
+void	philo_activities(t_philo *philo);
+void *start_philo(void *ptr);
+int	ft_atoi(const char *str);
 #endif

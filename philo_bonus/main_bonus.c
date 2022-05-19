@@ -6,34 +6,29 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/16 16:38:43 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/19 19:31:29 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	child_process(t_philo *philo)
+void	philo_activities(t_philo *philo)
 {
-	   // pthread_mutex_lock(&philo->fork);
+	    sem_wait(&philo->fork);
 		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
-		//pthread_mutex_lock(philo->right_fork);
+		sem_post(&philo->right_fork);
 		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
 		philo->count_eat++;
 		if (philo->count_eat == philo->data->number_must_eat)
 			philo->data->eaten++;
 		philo->time_to_kill = get_time() + philo->data->time_to_die;
 		get_message("is eating", philo->philo_id, philo->data, KYEL);
-	//	usleep(1000 * philo->data->time_to_eat);
+		usleep(1000 * philo->data->time_to_eat);
 		get_message("is sleeping", philo->philo_id, philo->data, KBLU);
-		// pthread_mutex_unlock(&philo->fork);
-		// pthread_mutex_unlock(philo->right_fork);
-		//usleep(philo->data->time_to_sleep * 1000);
+		sem_wait(&philo->fork);
+		sem_post(&philo->right_fork);
+		usleep(philo->data->time_to_sleep * 1000);
 		get_message("is thinking", philo->philo_id, philo->data, KCYN);
-}
-
-void	parent_process(int f2, int end[2], char **av, char **a_env)
-{
-	
 }
 
 void	get_message(char *s, int philo_id, t_data *data, char *clor)
@@ -50,13 +45,14 @@ unsigned int get_time()
 
 int ft_die(char *str)
 {
-	printf("%s\n", str);	
+	printf("%s\n", str);
+	return (0);	
 }
 
 int	main(int ac, char **av)
 {
-
+	t_data data;
 	if (ac > 5)
 		ft_die("Arguments error\n");
-    init_data(ac, av);
+	init_data(ac, av, &data);
 }
