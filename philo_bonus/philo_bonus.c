@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/19 19:32:46 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/19 19:45:39 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 t_data    *init_data(int ac, char **av, t_data	*data)
 {
 	int		i;
-	pthread_t temp;
-	if (!data)
-		return (0);
+	t_philo *philo;
+	
 	data->number_of_philo =  ft_atoi(av[1]); 
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -31,14 +30,12 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0)
 		ft_die("error args");
 	i = 0;
-	t_philo *philo;
-
 	philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
-	philo->pid = malloc(sizeof(pid_t) * data->number_of_philo);
 	while (i < data->number_of_philo)
 	 {
-	exit(1);
-		data->pid[i] = fork();
+		philo[i].pid = malloc(sizeof(pid_t) * data->number_of_philo);
+//	exit(1);
+		philo[i].pid = fork();
 		philo[i].philo_id = i + 1;
 		philo[i].data = data;
 		philo[i].fork = i;
@@ -46,7 +43,7 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	 	 	philo[i].right_fork = philo[0].fork;
 		 else
 		 	philo[i].right_fork = philo[i + 1].fork;
-		if (data->pid[i] == 0)
+		if (philo[i].pid == 0)
 			start_philo(&philo[i]);
 		i++;
 	}		
