@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/16 18:53:48 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/19 20:40:17 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ void	*routine(void *ptr)
 	pthread_t	thread;
 	philo = (t_philo *)ptr;
 	i = 0;
+	if (philo->philo_id % 2 == 0)
+	{
+		usleep(100);
+	}
 	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
-	pthread_create(&thread, NULL, &ft_check, philo);
+	pthread_create(&thread, NULL, &check_died, philo);
 	pthread_detach(thread);
 	while (1)
 	{
@@ -43,7 +47,7 @@ void	*routine(void *ptr)
 	return (NULL);
 }
 
-void *ft_check(void *ptr)
+void *check_died(void *ptr)
 {
 	t_philo		*philo;
 	philo = (t_philo *)ptr;
@@ -123,7 +127,7 @@ t_philo   *init_args(int ac, char **av, t_data	*data)
 		if (pthread_create(&philo[i].th_philo, NULL, routine, &philo[i]) != 0)
 			ft_die("Failed to create thread");
 		pthread_detach(philo[i].th_philo);
-		usleep(100);
+	//	usleep(100);
 		i++;
 	}
 	if (data->number_must_eat != -1)

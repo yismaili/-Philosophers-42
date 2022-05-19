@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/13 19:45:04 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:28:51 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ unsigned int get_time();
 void	clean_forks(t_philo *philo);
 void	philo_activities(t_philo *philo);
  int	ft_die(char *str);
- void *ft_check(void *ptr);
+ void *check_died(void *ptr);
  
 #endif
