@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/19 19:45:39 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:02:48 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 {
 	int		i;
 	t_philo *philo;
-	
+	 pid_t           *pid;
+	data->count_philo = 0;
+	data->eaten = 0;
+	data->st = 0;
 	data->number_of_philo =  ft_atoi(av[1]); 
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -30,12 +33,12 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0)
 		ft_die("error args");
 	i = 0;
+	data->get_t = get_time();
 	philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
+	pid = (pid_t *)malloc(sizeof(int) * data->number_of_philo);
 	while (i < data->number_of_philo)
 	 {
-		philo[i].pid = malloc(sizeof(pid_t) * data->number_of_philo);
-//	exit(1);
-		philo[i].pid = fork();
+		pid[i] = fork();
 		philo[i].philo_id = i + 1;
 		philo[i].data = data;
 		philo[i].fork = i;
@@ -43,9 +46,13 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	 	 	philo[i].right_fork = philo[0].fork;
 		 else
 		 	philo[i].right_fork = philo[i + 1].fork;
-		if (philo[i].pid == 0)
+		if (pid[i] == 0)
 			start_philo(&philo[i]);
 		i++;
+	}
+	while(data->st == 0)
+	{
+		usleep(100);
 	}		
 	return (data);
 }
@@ -57,13 +64,8 @@ void *check_died(void *ptr)
 
 	while (1)
 	{
-		if (philo->time_to_kill  <= get_time() && philo->data->time_to_die <= 310)
-		{
-			get_message("died", philo->philo_id, philo->data, KRED);
-			sem_wait(&philo->data->mut_write);
-			philo->data->st = 1;
-		}
-		else if ((philo->time_to_kill + 8) == get_time())
+	
+	  if (philo->time_to_kill <= get_time())
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			sem_wait(&philo->data->mut_write);

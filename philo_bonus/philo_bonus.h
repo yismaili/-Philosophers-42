@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/19 19:44:12 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/20 13:23:29 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_philo
     int             philo_id;
     sem_t           right_fork;
     sem_t           fork;
-    pid_t           pid;
     t_data          *data;
     int             count_eat;
     unsigned int    time_to_kill;
