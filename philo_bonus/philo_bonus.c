@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/20 14:02:48 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/20 21:33:56 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
 	pid = (pid_t *)malloc(sizeof(int) * data->number_of_philo);
 	while (i < data->number_of_philo)
+	{
+		sem_init(&philo[i].fork, 0, data->number_of_philo);
+		i++;
+	}
+	i = 0;
+	while (i < data->number_of_philo)
 	 {
 		pid[i] = fork();
 		philo[i].philo_id = i + 1;
@@ -50,10 +56,7 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 			start_philo(&philo[i]);
 		i++;
 	}
-	while(data->st == 0)
-	{
-		usleep(100);
-	}		
+	ft_kill(data, pid, philo);
 	return (data);
 }
 
@@ -118,4 +121,17 @@ int	ft_atoi(const char *str)
 			ft_die("Error");
 	}
 	return (res * sgn);
+}
+void	ft_kill(t_data *data, int **pid, t_philo *philo)
+{
+	int	i;
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		kill((*pid)[i], SIGKILL);
+		i++;
+	}
+	free(*pid);
+	free(data);
+	free(philo);
 }

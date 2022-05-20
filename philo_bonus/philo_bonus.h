@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/20 13:23:29 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/20 21:33:00 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,6 @@ int             ft_die(char *str);
 void	philo_activities(t_philo *philo);
 void *start_philo(void *ptr);
 int	ft_atoi(const char *str);
+void	ft_kill(t_data *data, int **pid, t_philo *philo);
+
 #endif

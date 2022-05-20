@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/19 19:31:29 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/20 20:43:52 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	philo_activities(t_philo *philo)
 {
 	    sem_wait(&philo->fork);
 		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
-		sem_post(&philo->right_fork);
+		sem_wait(&philo->right_fork);
 		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
 		philo->count_eat++;
 		if (philo->count_eat == philo->data->number_must_eat)
@@ -25,7 +25,7 @@ void	philo_activities(t_philo *philo)
 		get_message("is eating", philo->philo_id, philo->data, KYEL);
 		usleep(1000 * philo->data->time_to_eat);
 		get_message("is sleeping", philo->philo_id, philo->data, KBLU);
-		sem_wait(&philo->fork);
+		sem_post(&philo->fork);
 		sem_post(&philo->right_fork);
 		usleep(philo->data->time_to_sleep * 1000);
 		get_message("is thinking", philo->philo_id, philo->data, KCYN);
