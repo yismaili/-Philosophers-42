@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/20 20:43:52 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/29 00:20:37 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,31 @@
 
 void	philo_activities(t_philo *philo)
 {
-	    sem_wait(&philo->fork);
-		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
-		sem_wait(&philo->right_fork);
-		get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
-		philo->count_eat++;
-		if (philo->count_eat == philo->data->number_must_eat)
-			philo->data->eaten++;
-		philo->time_to_kill = get_time() + philo->data->time_to_die;
-		get_message("is eating", philo->philo_id, philo->data, KYEL);
-		usleep(1000 * philo->data->time_to_eat);
-		get_message("is sleeping", philo->philo_id, philo->data, KBLU);
-		sem_post(&philo->fork);
-		sem_post(&philo->right_fork);
-		usleep(philo->data->time_to_sleep * 1000);
-		get_message("is thinking", philo->philo_id, philo->data, KCYN);
+	int count_eat;
+	
+	count_eat = 0;
+	sem_wait(philo->data->fork);
+	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
+	sem_wait(philo->data->fork);
+	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
+	// count_eat++;
+	// if (count_eat == philo->data->number_must_eat)
+	// 	sem_post(philo->data->eaten);
+	philo->time_to_kill = get_time() + philo->data->time_to_die;
+	get_message("is eating", philo->philo_id, philo->data, KYEL);
+	usleep(1000 * philo->data->time_to_eat);
+	get_message("is sleeping", philo->philo_id, philo->data, KBLU);
+	sem_post(philo->data->fork);
+	sem_post(philo->data->fork);
+	usleep(philo->data->time_to_sleep * 1000);
+	get_message("is thinking", philo->philo_id, philo->data, KCYN);
 }
 
 void	get_message(char *s, int philo_id, t_data *data, char *clor)
 {
+	sem_wait(data->mut_write);
 	printf("%s %u %d %s\n",clor, get_time() - data->get_t, philo_id, s);
+	sem_post(data->mut_write);
 }
 
 unsigned int get_time()

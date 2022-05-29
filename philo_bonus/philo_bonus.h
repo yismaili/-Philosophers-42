@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/20 21:33:00 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/28 23:52:08 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <signal.h>
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -37,20 +38,20 @@ typedef struct s_data
     int time_to_sleep;
     int number_must_eat;
     unsigned int get_t;
-    int     eaten;
-    int     st;
-    int     count_philo;
-    sem_t			mut_write;
+    sem_t           *status;
+    sem_t           *eaten;
+    sem_t			*mut_write;
+    sem_t           *fork;
+    sem_t           *time_kill;
+    
 }   t_data;
 
 typedef struct s_philo
 {
-    int             philo_id;
-    sem_t           right_fork;
-    sem_t           fork;
     t_data          *data;
-    int             count_eat;
-    unsigned int    time_to_kill;
+    int             philo_id;
+    int             right_fork;
+    int             time_to_kill;
 }   t_philo;
 t_data    *init_data(int ac, char **av, t_data	*data);
 void	        get_message(char *s, int philo_id, t_data *data, char *clor);
@@ -61,5 +62,6 @@ void	philo_activities(t_philo *philo);
 void *start_philo(void *ptr);
 int	ft_atoi(const char *str);
 void	ft_kill(t_data *data, int **pid, t_philo *philo);
-
+void	init_locks(t_data *data);
+void	ft_kill(t_data *data, int **pid, t_philo *philo);
 #endif
