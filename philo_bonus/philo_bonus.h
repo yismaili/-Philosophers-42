@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 12:55:14 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/30 15:15:59 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_data
     int number_must_eat;
     unsigned int get_t;
     int           status;
-    int           eaten;
+    sem_t           *eaten;
     sem_t			*mut_write;
     sem_t           *fork;
    // sem_t           *time_kill;

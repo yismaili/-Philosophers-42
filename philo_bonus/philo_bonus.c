@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 12:52:58 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/30 15:27:25 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	
 	while (data->status == 0)
 	{
-		usleep(100);
 	}
 	ft_kill(data, &pid, philo);
 	return (data);
@@ -73,7 +72,7 @@ void	*check_eat(void *ptr)
 	philo = (t_philo *)ptr;
 	while (1)
 	{
-		if (philo->data->eaten == philo->data->number_of_philo)
+		if (*philo->data->eaten == philo->data->number_of_philo)
 			philo->data->status = 1;
     	usleep(500);
 	}
@@ -89,8 +88,7 @@ void	init_sem(t_data *data)
 	data->mut_write = sem_open("/dead_lock", O_CREAT, 0777, 1);
 	// sem_unlink("/eaten");
 	// data->eaten = sem_open("/eaten", O_CREAT, 0777, 1);
-	// // sem_unlink("/time_to_kill");
-	// // data->eaten = 0;
+	// data->eaten = 0;
 }
 
 void *check_died(void *ptr)
