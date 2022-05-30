@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/29 16:46:54 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/30 12:52:58 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	int		i;
 	t_philo *philo;
 	pid_t           *pid;
+	pthread_t temp;
+	
 	data->status = 0;
+	data->eaten = 0;
 	data->number_of_philo =  ft_atoi(av[1]); 
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -31,11 +34,11 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0)
 		ft_die("error args");
 	i = 0;
-	data->get_t = get_time();
 	philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
 	pid = (pid_t *)malloc(sizeof(int) * data->number_of_philo);
 	i = 0;
 	init_sem(data);
+	data->get_t = get_time();
 	while (i < data->number_of_philo)
 	 {
 		pid[i] = fork();
@@ -48,14 +51,34 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 		}
 		i++;
 	}
+	
+	if (data->number_must_eat != -1)
+	{
+		if (pthread_create(&temp, NULL, check_eat, philo) != 0)
+			ft_die("Failed to create thread");
+		pthread_detach(temp);
+	}
+	
 	while (data->status == 0)
 	{
-		if (data->status != 0)
-		{
-			ft_kill(data, &pid, philo);
-		}
+		usleep(100);
 	}
+	ft_kill(data, &pid, philo);
 	return (data);
+}
+
+void	*check_eat(void *ptr)
+{
+	t_philo *philo;
+	philo = (t_philo *)ptr;
+	while (1)
+	{
+		if (philo->data->eaten == philo->data->number_of_philo)
+			philo->data->status = 1;
+    	usleep(500);
+	}
+	return(NULL);
+	
 }
 
 void	init_sem(t_data *data)
@@ -66,8 +89,8 @@ void	init_sem(t_data *data)
 	data->mut_write = sem_open("/dead_lock", O_CREAT, 0777, 1);
 	// sem_unlink("/eaten");
 	// data->eaten = sem_open("/eaten", O_CREAT, 0777, 1);
-	// sem_unlink("/time_to_kill");
-	// data->eaten = 0;
+	// // sem_unlink("/time_to_kill");
+	// // data->eaten = 0;
 }
 
 void *check_died(void *ptr)
@@ -92,6 +115,7 @@ void *start_philo(void *ptr)
 {
 	t_philo		*philo;
 	pthread_t	thread;
+	
 	philo = (t_philo *)ptr;
 	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
 	pthread_create(&thread, NULL, &check_died, philo);
