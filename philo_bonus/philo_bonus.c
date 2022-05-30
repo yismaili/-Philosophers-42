@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 15:27:25 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/30 23:46:45 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 		pthread_detach(temp);
 	}
 	
-	while (data->status == 0)
-	{
-	}
+	// while (data->status == 0)
+	// {
+	// }
+	printf("here");
+	sem_wait(data->e);
 	ft_kill(data, &pid, philo);
 	return (data);
 }
@@ -86,6 +88,10 @@ void	init_sem(t_data *data)
 	data->fork = sem_open("/fork", O_CREAT, 0777, data->number_of_philo);
 	sem_unlink("/dead_lock");
 	data->mut_write = sem_open("/dead_lock", O_CREAT, 0777, 1);
+	sem_unlink("/e1");
+	data->e = sem_open("/e1", O_CREAT, 0777, 0);
+	sem_unlink("/dead");
+	data->dead = sem_open("/dead", O_CREAT, 0777, 1);
 	// sem_unlink("/eaten");
 	// data->eaten = sem_open("/eaten", O_CREAT, 0777, 1);
 	// data->eaten = 0;
@@ -101,10 +107,13 @@ void *check_died(void *ptr)
 	
 	  if (philo->time_to_kill <= get_time())
 		{
+			sem_wait(philo->data->dead);
 			get_message("died", philo->philo_id, philo->data, KRED);
-			sem_wait(philo->data->mut_write);
+			// printf("111111\n");
+			sem_post(philo->data->e);
 			philo->data->status = 1;
 		}
+		usleep(100);
 	}
 	return (NULL);
 }
