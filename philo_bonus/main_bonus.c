@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 18:46:14 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 21:33:29 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,23 @@ void	philo_activities(t_philo *philo)
 	get_message("is thinking", philo->philo_id, philo->data, KCYN);
 }
 
+void	ft_kill(t_data *data, int **pid, t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		kill((*pid)[i], SIGKILL);
+		i++;
+	}
+}
+
 void	get_message(char *s, int philo_id, t_data *data, char *clor)
 {
 	sem_wait(data->mut_write);
 	printf("%s %u %d %s\n", clor, get_time() - data->get_t, philo_id, s);
 	sem_post(data->mut_write);
-}
-
-unsigned int	get_time(void)
-{
-	struct timeval	current_time;
-
-	gettimeofday(&current_time, NULL);
-	return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
 }
 
 int	ft_die(char *str)

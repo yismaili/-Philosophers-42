@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 18:55:13 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 21:49:23 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,38 +32,39 @@
 
 typedef struct s_data
 {
-    int             number_of_philo;
-    int             time_to_die;
-    int             time_to_eat;
-    int             time_to_sleep;
-    int             number_must_eat;
-    unsigned int    get_t;
-    sem_t           *eaten;
-    sem_t           *mut_write;
-    sem_t           *fork;
-    sem_t           *dead;
-    sem_t           *ext;
-    
-}   t_data;
+	int				number_of_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				number_must_eat;
+	unsigned int	get_t;
+	int				status;
+	sem_t			*eaten;
+	sem_t			*mut_write;
+	sem_t			*fork;
+	sem_t			*dead;
+	sem_t			*ext;
+}	t_data;
 
 typedef struct s_philo
 {
-    t_data  *data;
-    int     philo_id;
-    int     time_to_kill;
-    int     count_eat;
-}   t_philo;
-
-t_data    *init_data(int ac, char **av, t_data	*data);
-void	        get_message(char *s, int philo_id, t_data *data, char *clor);
-void	        init_philo(t_data *data);
-unsigned int    get_time();
-int             ft_die(char *str);
-void	philo_activities(t_philo *philo);
-void *start_philo(void *ptr);
-int	ft_atoi(const char *str);
-void	ft_kill(t_data *data, int **pid, t_philo *philo);
-void	init_sem(t_data *data);
-void	ft_kill(t_data *data, int **pid, t_philo *philo);
-void	*check_eat(void *ptr);
+	t_data	*data;
+	int		philo_id;
+	int		time_to_kill;
+	int		count_eat;
+}	t_philo;
+t_data			*init_data(int ac, char **av, t_data	*data);
+void			get_message(char *s, int philo_id, t_data *data, char *clor);
+void			init_philo(t_data *data);
+unsigned int	get_time(void);
+int				ft_die(char *str);
+void			philo_activities(t_philo *philo);
+void			*start_philo(void *ptr);
+int				ft_atoi(const char *str);
+void			ft_kill(t_data *data, int **pid, t_philo *philo);
+void			init_sem(t_data *data);
+void			ft_kill(t_data *data, int **pid, t_philo *philo);
+void			*check_eat(void *ptr);
+void			start_process(t_philo *philo, t_data *data, pid_t *pid);
+void			create_process(t_philo	*philo, t_data *data);
 #endif
