@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 15:23:42 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 17:18:55 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 void	philo_activities(t_philo *philo)
 {
-	int count_eat;
 	
-	count_eat = 0;
 	sem_wait(philo->data->fork);
 	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
 	sem_wait(philo->data->fork);
 	get_message("has taken a fork", philo->philo_id, philo->data, KGRN);
-	// count_eat++;
-	// if (count_eat == philo->data->number_must_eat)
-	// 	sem_post(philo->data->eaten);
+	philo->count_eat++;
+	if (philo->count_eat == philo->data->number_must_eat)
+		sem_post(philo->data->eaten);
 	philo->time_to_kill = get_time() + philo->data->time_to_die;
 	get_message("is eating", philo->philo_id, philo->data, KYEL);
 	usleep(1000 * philo->data->time_to_eat);
@@ -57,7 +55,7 @@ int ft_die(char *str)
 int	main(int ac, char **av)
 {
 	t_data data;
-	if (ac > 5)
+	if (ac < 5)
 		ft_die("Arguments error\n");
 	init_data(ac, av, &data);
 }

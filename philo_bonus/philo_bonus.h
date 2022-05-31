@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 23:44:55 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:56:10 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,12 @@ typedef struct s_data
     int number_must_eat;
     unsigned int get_t;
     int           status;
-    sem_t           *eaten;
+  sem_t           *eaten;
     sem_t			*mut_write;
     sem_t           *fork;
-    sem_t           *exit;
       sem_t           *dead;
-   sem_t         *e;
-   // sem_t           *time_kill;
+   sem_t         *ext;
+
     
 }   t_data;
 
@@ -55,6 +54,7 @@ typedef struct s_philo
     int             philo_id;
     int             right_fork;
     int             time_to_kill;
+     int count_eat;
 }   t_philo;
 t_data    *init_data(int ac, char **av, t_data	*data);
 void	        get_message(char *s, int philo_id, t_data *data, char *clor);

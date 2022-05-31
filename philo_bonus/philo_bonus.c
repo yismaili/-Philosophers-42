@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/30 23:46:45 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 17:28:23 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	pthread_t temp;
 	
 	data->status = 0;
-	data->eaten = 0;
+	philo->count_eat = 0;
 	data->number_of_philo =  ft_atoi(av[1]); 
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -51,35 +51,30 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 		}
 		i++;
 	}
-	
-	if (data->number_must_eat != -1)
+	if (philo->data->number_must_eat != -1)
 	{
 		if (pthread_create(&temp, NULL, check_eat, philo) != 0)
 			ft_die("Failed to create thread");
 		pthread_detach(temp);
 	}
-	
-	// while (data->status == 0)
-	// {
-	// }
-	printf("here");
-	sem_wait(data->e);
+	sem_wait(data->ext);
 	ft_kill(data, &pid, philo);
 	return (data);
 }
 
 void	*check_eat(void *ptr)
 {
-	t_philo *philo;
-	philo = (t_philo *)ptr;
-	while (1)
-	{
-		if (*philo->data->eaten == philo->data->number_of_philo)
-			philo->data->status = 1;
-    	usleep(500);
-	}
-	return(NULL);
+	t_philo	*philo;
+	int		i; 
 	
+	philo = (t_philo *)ptr;
+	while ( i < philo->data->number_of_philo)
+	{
+		sem_wait(philo->data->eaten);
+		i++;
+	}
+	sem_post(philo->data->ext);
+	return(NULL);
 }
 
 void	init_sem(t_data *data)
@@ -88,20 +83,19 @@ void	init_sem(t_data *data)
 	data->fork = sem_open("/fork", O_CREAT, 0777, data->number_of_philo);
 	sem_unlink("/dead_lock");
 	data->mut_write = sem_open("/dead_lock", O_CREAT, 0777, 1);
-	sem_unlink("/e1");
-	data->e = sem_open("/e1", O_CREAT, 0777, 0);
+	sem_unlink("/ext");
+	data->ext = sem_open("/ext", O_CREAT, 0777, 0);
 	sem_unlink("/dead");
 	data->dead = sem_open("/dead", O_CREAT, 0777, 1);
-	// sem_unlink("/eaten");
-	// data->eaten = sem_open("/eaten", O_CREAT, 0777, 1);
-	// data->eaten = 0;
+	sem_unlink("/eat");
+	data->eaten = sem_open("/eat", O_CREAT, 0777, 0);
 }
 
 void *check_died(void *ptr)
 {
 	t_philo		*philo;
 	philo = (t_philo *)ptr;
-
+	int count_eat = 0;
 	while (1)
 	{
 	
@@ -109,9 +103,7 @@ void *check_died(void *ptr)
 		{
 			sem_wait(philo->data->dead);
 			get_message("died", philo->philo_id, philo->data, KRED);
-			// printf("111111\n");
-			sem_post(philo->data->e);
-			philo->data->status = 1;
+			sem_post(philo->data->ext);
 		}
 		usleep(100);
 	}
@@ -122,16 +114,17 @@ void *start_philo(void *ptr)
 {
 	t_philo		*philo;
 	pthread_t	thread;
-	
+
 	philo = (t_philo *)ptr;
 	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
 	pthread_create(&thread, NULL, &check_died, philo);
 	pthread_detach(thread);
+	
+	philo->count_eat = 0 ;
 	while (1)
 	{
 		philo_activities(philo);
 	}
-	
 	 return(NULL);
 }
 
