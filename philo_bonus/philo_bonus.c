@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 17:28:23 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/05/31 18:04:44 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_data    *init_data(int ac, char **av, t_data	*data)
 	}
 	else
 		data->number_must_eat = -1;
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0)
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200 || data->number_must_eat == 0 || data->time_to_eat < 60 || data->time_to_sleep < 60 || data->time_to_die < 60)
 		ft_die("error args");
 	i = 0;
 	philo = (t_philo *)malloc(sizeof(t_philo) * data->number_of_philo);
