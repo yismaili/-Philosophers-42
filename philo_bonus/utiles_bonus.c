@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 20:44:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 21:32:25 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:08:28 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	*check_eat(void *ptr)
 	t_philo	*philo;
 	int		i;
 
+	i = 0;
 	philo = (t_philo *)ptr;
 	while (i < philo->data->number_of_philo)
 	{

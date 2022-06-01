@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 20:13:34 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 18:33:20 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:00:11 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,25 @@ void	get_message(char *s, int philo_id, t_data *data, char *clor)
 	pthread_mutex_unlock(&data->mut_write);
 }
 
+void	print_error(char *s, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_lock(&data->mut_write);
+	while (s[i])
+	{
+		write(2, &s[i], 1);
+		i++;
+	}
+}
+
 void	init_args(int ac, char **av, t_data	*data)
 {
 	t_philo		*philo;
 	int			i;
 
 	data->get_t = get_time();
-	data->count_philo = 0;
 	data->st = 0;
 	data->eaten = 0;
 	data->number_of_philo = ft_atoi(av[1]);

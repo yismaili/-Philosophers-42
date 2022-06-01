@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:08:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 18:26:20 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:00:01 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_atoi(const char *str)
 		if (str[i] == '-')
 			sgn *= -1;
 		if (str[i + 1] == '\0')
-			ft_die("Error");
+			exit(0);
 		i++;
 	}
 	while (str[i])
@@ -36,7 +36,7 @@ int	ft_atoi(const char *str)
 		if (str[i] >= '0' && str[i] <= '9')
 			res = (res * 10) + (str[i++] - '0');
 		else
-			ft_die("Error");
+			exit(0);
 	}
 	return (res * sgn);
 }
@@ -86,7 +86,7 @@ void	init_data(t_data *data, t_philo *philo, char **av, int ac)
 	if (data->number_of_philo <= 0 || data->number_of_philo > 200
 		|| data->number_must_eat == 0 || data->time_to_eat < 60
 		|| data->time_to_sleep < 60 || data->time_to_die < 60)
-		ft_die("ArgumentError\n");
+		print_error("error\n", data);
 	init_philo(philo, data);
 	create_thread(philo, data);
 }

@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 18:29:50 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 21:03:23 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_data
 	int				number_must_eat;
 	int				st;
 	int				eaten;
-	int				count_philo;
 	unsigned int	get_t;
 	pthread_mutex_t	mut_write;
 }	t_data;
@@ -61,10 +60,11 @@ void			get_message(char *s, int id, t_data *data, char *clor);
 unsigned int	get_time(void);
 void			clean_forks(t_philo *philo);
 void			philo_activities(t_philo *philo);
-int				ft_die(char *str);
 void			*check_died(void *ptr);
 void			philo_activities(t_philo *philo);
 void			*routine(void *ptr);
 void			create_thread(t_philo *philo, t_data *data);
 void			init_data(t_data *data, t_philo *philo, char **av, int ac);
+int				ft_die(char *str);
+void			print_error(char *s, t_data *data);
 #endif

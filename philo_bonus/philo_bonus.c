@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 20:46:18 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:07:32 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 t_data	*init_data(int ac, char **av, t_data	*data)
 {
-	int			i;
 	t_philo		*philo;
 
-	philo->count_eat = 0;
+	philo = NULL;
 	data->number_of_philo = ft_atoi(av[1]);
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);

@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 21:33:29 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:11:21 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	ft_kill(t_data *data, int **pid, t_philo *philo)
 		kill((*pid)[i], SIGKILL);
 		i++;
 	}
+	free(philo);
 }
 
 void	get_message(char *s, int philo_id, t_data *data, char *clor)

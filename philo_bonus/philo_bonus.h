@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 21:49:23 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 14:10:38 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-	t_data	*data;
-	int		philo_id;
-	int		time_to_kill;
-	int		count_eat;
+	t_data			*data;
+	int				philo_id;
+	unsigned int	time_to_kill;
+	int				count_eat;
 }	t_philo;
 t_data			*init_data(int ac, char **av, t_data	*data);
 void			get_message(char *s, int philo_id, t_data *data, char *clor);
