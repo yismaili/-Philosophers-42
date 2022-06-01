@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:08:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/11 21:13:49 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/01 18:26:20 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,52 @@ int	ft_atoi(const char *str)
 	return (res * sgn);
 }
 
-unsigned int get_time()
+unsigned int	get_time(void)
 {
-    struct timeval current_time;
-    gettimeofday(&current_time, NULL);
-    return(current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
+}
+
+void	init_philo(t_philo *philo, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_philo)
+	{
+		philo[i].philo_id = i + 1;
+		philo[i].data = data;
+		if (i == (data->number_of_philo - 1))
+			philo[i].right_fork = &philo[0].fork;
+		else
+			philo[i].right_fork = &philo[i + 1].fork;
+		i++;
+	}
+}
+
+int	ft_die(char *str)
+{
+	printf("%s\n", str);
+	return (0);
+}
+
+void	init_data(t_data *data, t_philo *philo, char **av, int ac)
+{
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	if (ac == 6)
+	{
+		data->number_must_eat = ft_atoi(av[5]);
+	}
+	else
+		data->number_must_eat = -1;
+	if (data->number_of_philo <= 0 || data->number_of_philo > 200
+		|| data->number_must_eat == 0 || data->time_to_eat < 60
+		|| data->time_to_sleep < 60 || data->time_to_die < 60)
+		ft_die("ArgumentError\n");
+	init_philo(philo, data);
+	create_thread(philo, data);
 }
