@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 20:13:34 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 21:00:11 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/04 16:06:51 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,16 @@ void	init_args(int ac, char **av, t_data	*data)
 		i++;
 	}
 	init_data(data, philo, av, ac);
+}
+
+void	ft_usleep(long time)
+{
+	long int	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(50);
+	return ;
 }
 
 int	main(int ac, char **av)

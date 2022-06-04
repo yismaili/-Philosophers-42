@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 21:03:23 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/04 16:07:09 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ void			create_thread(t_philo *philo, t_data *data);
 void			init_data(t_data *data, t_philo *philo, char **av, int ac);
 int				ft_die(char *str);
 void			print_error(char *s, t_data *data);
+void			ft_usleep(long time);
 #endif

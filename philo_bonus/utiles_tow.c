@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 21:31:23 by yismaili          #+#    #+#             */
-/*   Updated: 2022/05/31 21:33:34 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/04 16:49:35 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,14 @@ unsigned int	get_time(void)
 
 	gettimeofday(&current_time, NULL);
 	return (current_time.tv_sec * 1000 + current_time.tv_usec / 1000);
+}
+
+void	ft_usleep(long time)
+{
+	long int	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(50);
+	return ;
 }

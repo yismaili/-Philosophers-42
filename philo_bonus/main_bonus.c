@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 14:11:21 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/04 16:50:59 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	philo_activities(t_philo *philo)
 		sem_post(philo->data->eaten);
 	philo->time_to_kill = get_time() + philo->data->time_to_die;
 	get_message("is eating", philo->philo_id, philo->data, KYEL);
-	usleep(1000 * philo->data->time_to_eat);
+	ft_usleep(philo->data->time_to_eat);
 	get_message("is sleeping", philo->philo_id, philo->data, KBLU);
 	sem_post(philo->data->fork);
 	sem_post(philo->data->fork);
-	usleep(philo->data->time_to_sleep * 1000);
+	ft_usleep(philo->data->time_to_sleep);
 	get_message("is thinking", philo->philo_id, philo->data, KCYN);
 }
 
