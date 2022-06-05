@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 18:52:48 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:07:09 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:08:20 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ typedef struct s_philo
 }	t_philo;
 
 int				ft_atoi(const char *str);
-void			init_args(int ac, char **av, t_data *data);
+void			init_args(t_data	*data, t_philo *philo);
 void			init_philo(t_philo *philo, t_data *data);
 void			take_forks(t_philo *philo);
 void			get_message(char *s, int id, t_data *data, char *clor);
 unsigned int	get_time(void);
-void			clean_forks(t_philo *philo);
 void			philo_activities(t_philo *philo);
 void			*check_died(void *ptr);
 void			philo_activities(t_philo *philo);
 void			*routine(void *ptr);
 void			create_thread(t_philo *philo, t_data *data);
-void			init_data(t_data *data, t_philo *philo, char **av, int ac);
+void			init_data(t_data *data, char **av, int ac);
 int				ft_die(char *str);
 void			print_error(char *s, t_data *data);
 void			ft_usleep(long time);
+void			ft_free(t_philo *philo, t_data *data);
 #endif

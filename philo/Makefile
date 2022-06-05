@@ -6,7 +6,7 @@
 #    By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 11:12:24 by yismaili          #+#    #+#              #
-#    Updated: 2022/06/01 14:01:48 by yismaili         ###   ########.fr        #
+#    Updated: 2022/06/04 22:47:31 by yismaili         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME = philo
 FLAGS= -Wall -Wextra -Werror
 SRCS = main.c\
 		philo.c\
-		utiles.c
+		utiles.c\
+		utile_tow.c 
 
 OBJS=$(SRCS:.c=.o)
 INCL= philosophers.h
@@ -50,7 +51,6 @@ clean:
 
 fclean:clean
 	@echo "$(BGreen) Fclean"
-	rm -rf *.a
 	rm -rf philo
 re : fclean all
 

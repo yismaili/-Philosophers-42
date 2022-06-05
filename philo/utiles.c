@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 19:08:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/01 21:00:01 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:07:26 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,9 @@ int	ft_die(char *str)
 	return (0);
 }
 
-void	init_data(t_data *data, t_philo *philo, char **av, int ac)
+void	init_data(t_data *data, char **av, int ac)
 {
+	data->number_of_philo = ft_atoi(av[1]);
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
@@ -83,10 +84,4 @@ void	init_data(t_data *data, t_philo *philo, char **av, int ac)
 	}
 	else
 		data->number_must_eat = -1;
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200
-		|| data->number_must_eat == 0 || data->time_to_eat < 60
-		|| data->time_to_sleep < 60 || data->time_to_die < 60)
-		print_error("error\n", data);
-	init_philo(philo, data);
-	create_thread(philo, data);
 }

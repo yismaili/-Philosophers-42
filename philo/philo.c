@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 11:34:21 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:09:00 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 13:36:20 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	*check_died(void *ptr)
 	philo = (t_philo *)ptr;
 	while (1)
 	{
-		if (philo->time_to_kill  == get_time())
+		if (philo->time_to_kill == get_time())
 		{
 			get_message("died", philo->philo_id, philo->data, KRED);
 			philo->data->st = 1;
@@ -76,7 +76,6 @@ void	*check_eat(void *ptr)
 	{
 		if (philo->data->eaten == philo->data->number_of_philo)
 			philo->data->st = 1;
-		usleep(100);
 	}
 	return (NULL);
 }
@@ -86,6 +85,7 @@ void	create_thread(t_philo *philo, t_data *data)
 	int			i;
 	pthread_t	temp;
 	pthread_t	thread;
+
 	i = 0;
 	while (i < data->number_of_philo)
 	{
@@ -105,7 +105,6 @@ void	create_thread(t_philo *philo, t_data *data)
 	}
 	i = 0;
 	while (data->st == 0)
-	{
 		usleep(100);
-	}
+	ft_free(philo, data);
 }
