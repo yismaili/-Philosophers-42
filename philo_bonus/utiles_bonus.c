@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 20:44:53 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:48:00 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:37:53 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,13 @@ void	*start_philo(void *ptr)
 
 	philo = (t_philo *)ptr;
 	philo->time_to_kill = philo->data->get_t + philo->data->time_to_die;
-	pthread_create(&thread, NULL, &check_died, philo);
+	if (pthread_create(&thread, NULL, &check_died, philo) != 0)
+		ft_die("Failed to create thread");
 	pthread_detach(thread);
+	if (philo->philo_id % 2 == 0)
+	{
+		usleep(100);
+	}
 	philo->count_eat = 0 ;
 	while (1)
 	{

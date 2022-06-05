@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 13:52:32 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:49:47 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:40:49 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void			ft_kill(t_data *data, int **pid, t_philo *philo);
 void			*check_eat(void *ptr);
 void			start_process(t_philo *philo, t_data *data, pid_t *pid);
 void			create_process(t_philo	*philo, t_data *data);
-void	*check_died(void *ptr);
-void	ft_usleep(long time);
+void			*check_died(void *ptr);
+void			ft_usleep(long time);
 #endif

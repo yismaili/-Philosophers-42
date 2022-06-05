@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:11 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:47:35 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:37:29 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ t_data	*init_data(int ac, char **av, t_data	*data)
 		data->number_must_eat = ft_atoi(av[5]);
 	else
 		data->number_must_eat = -1;
-	if (data->number_of_philo <= 0 || data->number_of_philo > 200
-		|| data->number_must_eat == 0 || data->time_to_eat < 60
-		|| data->time_to_sleep < 60 || data->time_to_die < 60)
-		ft_die("error args");
+	if (data->number_of_philo <= 0 || data->number_of_philo <= 0
+		|| data->number_must_eat == 0 || data->time_to_eat <= 0
+		|| data->time_to_sleep <= 0 || data->time_to_die <= 0)
+		ft_die("\n");
 	create_process(philo, data);
 	return (data);
 }
@@ -53,7 +53,6 @@ void	start_process(t_philo *philo, t_data *data, pid_t *pid)
 {
 	int			i;
 	pthread_t	temp;
-	//pthread_t	thread;
 
 	i = 0;
 	while (i < data->number_of_philo)
@@ -68,9 +67,6 @@ void	start_process(t_philo *philo, t_data *data, pid_t *pid)
 		}
 		i++;
 	}
-	// if (pthread_create(&thread, NULL, &check_died, philo) != 0)
-	// 	ft_die("Failed to create thread");
-	// pthread_detach(thread);
 	if (philo->data->number_must_eat != -1)
 	{
 		if (pthread_create(&temp, NULL, check_eat, philo) != 0)

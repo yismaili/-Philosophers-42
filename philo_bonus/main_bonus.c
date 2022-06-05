@@ -6,7 +6,7 @@
 /*   By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 12:39:05 by yismaili          #+#    #+#             */
-/*   Updated: 2022/06/04 16:50:59 by yismaili         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:26:51 by yismaili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,18 @@ void	ft_kill(t_data *data, int **pid, t_philo *philo)
 	int	i;
 
 	i = 0;
+	sem_close(data->eaten);
+	sem_close(data->fork);
+	sem_close(data->mut_write);
+	sem_close(data->dead);
+	sem_close(data->ext);
 	while (i < data->number_of_philo)
 	{
 		kill((*pid)[i], SIGKILL);
 		i++;
 	}
 	free(philo);
+	free(*pid);
 }
 
 void	get_message(char *s, int philo_id, t_data *data, char *clor)

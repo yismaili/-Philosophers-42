@@ -6,7 +6,7 @@
 #    By: yismaili <yismaili@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 11:12:24 by yismaili          #+#    #+#              #
-#    Updated: 2022/06/01 14:22:13 by yismaili         ###   ########.fr        #
+#    Updated: 2022/06/05 14:13:00 by yismaili         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ clean:
 
 fclean:clean
 	@echo "$(BGreen) Fclean"
-	rm -rf *.a
 	rm -rf philo_bonus
 re : fclean all
 
